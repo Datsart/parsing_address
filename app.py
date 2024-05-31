@@ -7,7 +7,7 @@ import json
 
 # создается БД
 create_db()
-engine = create_engine("mysql+pymysql://user:12345@localhost/database")
+engine = create_engine("mysql+pymysql://root:1Peaceful!!!***@localhost/mydatabase")
 
 # модель таблицы
 BASE = declarative_base()
@@ -31,13 +31,13 @@ session = Session()
 
 # датафрейм
 df = pd.read_csv('./парсинг регистрации.csv', on_bad_lines='skip', sep='‰', engine='python')
-error_dict = {}
+error_list = []
 for index in range(len(df)):
     response = requests.post(
         'http://83.239.206.206:5090/api/gpt_request/',
         data={
             'api_key': 'test',
-            'text': f'распознай адрес - {df.iloc[index]["b_crm_contact__registration_address"]}. И добавь в поля    town    street  number_house   apartment. Овет - словарь пайтон'
+            'text': f'распознай адрес - {df.iloc[index]["b_crm_contact__registration_address"]}. И добавь в поля    town    street  number_house   apartment. если встречается 2 адреса то бери первый. Овет - словарь пайтон'
         }
     )
     try:
@@ -54,6 +54,7 @@ for index in range(len(df)):
         )
         session.add(string)
         session.commit()
+        print(index)
     except BaseException as e:
-        error_dict[index] = e
-        print(error_dict)
+        error_list.append(index)
+        print(error_list)
