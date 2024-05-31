@@ -1,3 +1,4 @@
 pip3 install -r req.txt
 docker compose up -d
-запустить app.py
+(docker если запустится)
+запустить app.py -> создается БД и таблица
